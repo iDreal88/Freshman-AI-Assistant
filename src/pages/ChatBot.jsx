@@ -19,7 +19,7 @@ export default function ChatBot() {
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer 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', // Replace with real key
-          'HTTP-Referer': 'http://localhost:5173', // Or your real domain
+          'HTTP-Referer': 'https://freshman-ai-assistant.pages.dev', // Or your real domain
           'X-Title': 'FreshmanAI Assistant',
         },
         body: JSON.stringify({
