@@ -15,6 +15,7 @@ export default function ChatBot() {
 
   const sendMessageToAI = async (userInput) => {
     try {
+      console.log('API KEY LOADED:', apiKey);
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
