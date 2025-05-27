@@ -15,14 +15,14 @@ export default function ChatBot() {
 
   const sendMessageToAI = async (userInput) => {
     try {
-      const response = await fetch('https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf', {
+      const response = await fetch('https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${HUGGINGFACE_API_KEY}`,
+          'Authorization': `Bearer ${HUGGINGFACE_API_KEY}`,
         },
         body: JSON.stringify({
-          inputs: `User: ${userInput}\nAI:`, // prompt format
+          inputs: `User: ${userInput}\nAI:`,
         }),
       });
 
