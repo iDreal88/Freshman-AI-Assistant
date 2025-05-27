@@ -15,7 +15,6 @@ export default function ChatBot() {
 
   const sendMessageToAI = async (userInput) => {
     try {
-      console.log('API KEY LOADED:', apiKey);
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -23,7 +22,7 @@ export default function ChatBot() {
           'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: 'openai/gpt-3.5-turbo',
+          model: "anthropic/claude-3-haiku",
           messages: [
             { role: 'system', content: 'You are a helpful NTU Freshman Assistant.' },
             { role: 'user', content: userInput },
