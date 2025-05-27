@@ -15,7 +15,7 @@ export default function ChatBot() {
 
   const sendMessageToAI = async (userInput) => {
     try {
-      const response = await fetch('https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-alpha', {
+      const response = await fetch('https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
