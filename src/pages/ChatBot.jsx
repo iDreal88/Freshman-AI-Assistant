@@ -7,8 +7,6 @@ export default function ChatBot() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
-  const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
-
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
@@ -19,7 +17,7 @@ export default function ChatBot() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
+          'Authorization': `Bearer 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`,
         },
         body: JSON.stringify({
           model: 'openai/gpt-4',
