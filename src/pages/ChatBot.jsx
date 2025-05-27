@@ -7,35 +7,33 @@ export default function ChatBot() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
+  const HUGGINGFACE_API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY;
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
   const sendMessageToAI = async (userInput) => {
     try {
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      const response = await fetch('https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer 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`,
+          Authorization: `Bearer ${HUGGINGFACE_API_KEY}`,
         },
         body: JSON.stringify({
-          model: 'openai/gpt-4',
-          messages: [
-            { role: 'system', content: 'You are a helpful NQU Freshman Assistant.' },
-            { role: 'user', content: userInput },
-          ],
+          inputs: `User: ${userInput}\nAI:`, // prompt format
         }),
       });
 
       const data = await response.json();
-      console.log('Response data:', data); // <--- Add this
+      console.log('Hugging Face Response:', data);
 
-      if (!response.ok) {
-        throw new Error(data?.error?.message || 'API request failed');
+      if (!response.ok || data.error) {
+        throw new Error(data?.error || 'API request failed');
       }
 
-      const aiReply = data.choices?.[0]?.message?.content || "Sorry, I couldn't get a response.";
+      const aiReply = data?.generated_text || "Sorry, I couldn't get a response.";
       setMessages((prev) => [...prev, { sender: 'ai', text: aiReply }]);
     } catch (err) {
       console.error(err);
