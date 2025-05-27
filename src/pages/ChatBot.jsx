@@ -20,10 +20,9 @@ export default function ChatBot() {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${apiKey}`,
-          'HTTP-Referer': 'https://freshman-ai-assistant.pages.dev', // <-- required when deployed
         },
         body: JSON.stringify({
-          model: 'openrouter/openai/gpt-4', // ✅ use a valid OpenRouter model ID
+          model: 'openai/gpt-3.5-turbo',
           messages: [
             { role: 'system', content: 'You are a helpful NTU Freshman Assistant.' },
             { role: 'user', content: userInput },
