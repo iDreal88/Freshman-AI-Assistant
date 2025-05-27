@@ -31,6 +31,7 @@ export default function ChatBot() {
       });
 
       const data = await response.json();
+      console.log('Response data:', data); // <--- Add this
 
       if (!response.ok) {
         throw new Error(data?.error?.message || 'API request failed');
