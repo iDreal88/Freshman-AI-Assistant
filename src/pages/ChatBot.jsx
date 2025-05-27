@@ -25,6 +25,8 @@ export default function ChatBot() {
       return;
     }
 
+    console.log('OPENROUTER_API_KEY:', OPENROUTER_API_KEY);
+
     try {
       const formattedMessages = [
         {
