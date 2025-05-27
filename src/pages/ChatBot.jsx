@@ -20,9 +20,10 @@ export default function ChatBot() {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${apiKey}`,
+          'HTTP-Referer': 'https://freshman-ai-assistant.pages.dev', // <-- required when deployed
         },
         body: JSON.stringify({
-          model: 'gpt-4', // Choose a valid model
+          model: 'openrouter/openai/gpt-4', // ✅ use a valid OpenRouter model ID
           messages: [
             { role: 'system', content: 'You are a helpful NTU Freshman Assistant.' },
             { role: 'user', content: userInput },
@@ -31,6 +32,11 @@ export default function ChatBot() {
       });
 
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.error?.message || 'API request failed');
+      }
+
       const aiReply = data.choices?.[0]?.message?.content || "Sorry, I couldn't get a response.";
       setMessages((prev) => [...prev, { sender: 'ai', text: aiReply }]);
     } catch (err) {
