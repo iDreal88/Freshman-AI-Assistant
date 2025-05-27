@@ -32,18 +32,16 @@ export default function ChatBot() {
     }
 
     try {
-      // Using a more reliable model endpoint
-      const response = await fetch('https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1', {
+      const response = await fetch('https://api-inference.huggingface.co/models/google/flan-t5-xxl', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${HUGGINGFACE_API_KEY}`,
         },
         body: JSON.stringify({
-          inputs: `<s>[INST] ${userInput} [/INST]`,
+          inputs: userInput,
           parameters: {
-            max_new_tokens: 250,
-            return_full_text: false,
+            max_new_tokens: 150,
           },
         }),
       });
@@ -67,8 +65,7 @@ export default function ChatBot() {
       }
 
       const data = await response.json();
-
-      const aiReply = data[0]?.generated_text || "Sorry, I couldn't process that. Please try again.";
+      const aiReply = data[0]?.generated_text || "I didn't understand that. Could you rephrase?";
 
       setMessages((prev) => [...prev, { sender: 'ai', text: aiReply }]);
     } catch (err) {
@@ -77,7 +74,7 @@ export default function ChatBot() {
         ...prev,
         {
           sender: 'ai',
-          text: err.message.includes('404') ? 'The AI model is currently unavailable. Please try another model.' : `Error: ${err.message || 'Failed to get response'}`,
+          text: `Error: ${err.message.includes('404') ? 'The AI service is currently unavailable.' : 'Failed to get response. Please try again.'}`,
         },
       ]);
     } finally {
