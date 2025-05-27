@@ -19,12 +19,12 @@ export default function ChatBot() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
+          'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
           model: 'gpt-4', // Choose a valid model
           messages: [
-            { role: 'system', content: 'You are a helpful NTU Freshman Assistant' },
+            { role: 'system', content: 'You are a helpful NTU Freshman Assistant.' },
             { role: 'user', content: userInput },
           ],
         }),
