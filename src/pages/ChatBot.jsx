@@ -4,68 +4,66 @@ export default function ChatBot() {
   const [messages, setMessages] = useState([
     {
       sender: 'ai',
-      text: "Hello! I'm your Freshman AI Assistant. How can I help you today?", // Fixed apostrophe
+      text: "Hello! I'm your Freshman AI Assistant. How can I help you today?",
     },
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
-  const HUGGINGFACE_API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY;
+  const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
   const sendMessageToAI = async (userInput) => {
-    if (!HUGGINGFACE_API_KEY) {
-      console.error('Hugging Face API key is missing');
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: 'ai',
-          text: 'Configuration error - API key not found',
-        },
-      ]);
+    if (!OPENROUTER_API_KEY) {
+      console.error('OpenRouter API key is missing');
+      setMessages((prev) => [...prev, { sender: 'ai', text: 'Configuration error - API key not found' }]);
       setIsTyping(false);
       return;
     }
 
     try {
-      const response = await fetch('https://api-inference.huggingface.co/models/google/flan-t5-xxl', {
+      const formattedMessages = [
+        {
+          role: 'system',
+          content: 'You are a helpful assistant for freshmen students.',
+        },
+        ...messages
+          .filter((msg) => msg.sender === 'user' || msg.sender === 'ai')
+          .map((msg) => ({
+            role: msg.sender === 'user' ? 'user' : 'assistant',
+            content: msg.text,
+          })),
+        {
+          role: 'user',
+          content: userInput,
+        },
+      ];
+
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${HUGGINGFACE_API_KEY}`,
+          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
         },
         body: JSON.stringify({
-          inputs: userInput,
-          parameters: {
-            max_new_tokens: 150,
-          },
+          model: 'openai/gpt-4',
+          messages: formattedMessages,
+          temperature: 0.7,
+          max_tokens: 500,
         }),
       });
 
-      if (response.status === 503) {
-        const waitTime = response.headers.get('estimated-seconds') || 30;
-        setMessages((prev) => [
-          ...prev,
-          {
-            sender: 'ai',
-            text: `Model is loading, please wait about ${waitTime} seconds and try again`,
-          },
-        ]);
-        setIsTyping(false);
-        return;
-      }
-
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      const aiReply = data[0]?.generated_text || "I didn't understand that. Could you rephrase?";
+      const aiReply = data.choices?.[0]?.message?.content || "I didn't understand that. Could you rephrase?";
 
       setMessages((prev) => [...prev, { sender: 'ai', text: aiReply }]);
     } catch (err) {
@@ -74,7 +72,7 @@ export default function ChatBot() {
         ...prev,
         {
           sender: 'ai',
-          text: `Error: ${err.message.includes('404') ? 'The AI service is currently unavailable.' : 'Failed to get response. Please try again.'}`,
+          text: `Error: ${err.message.includes('429') ? 'Rate limit exceeded. Try again later.' : 'Failed to get response. Please try again.'}`,
         },
       ]);
     } finally {
@@ -97,15 +95,8 @@ export default function ChatBot() {
   };
 
   const tryAlternativeModel = () => {
-    setMessages((prev) => [
-      ...prev,
-      {
-        sender: 'ai',
-        text: 'Trying an alternative model...',
-      },
-    ]);
+    setMessages((prev) => [...prev, { sender: 'ai', text: 'Trying an alternative model... (feature coming soon)' }]);
     setIsTyping(true);
-    // Implementation for alternative model would go here
   };
 
   return (
