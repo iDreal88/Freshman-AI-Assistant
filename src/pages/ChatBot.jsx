@@ -22,7 +22,7 @@ export default function ChatBot() {
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: 'gpt-3.5-turbo', // Choose a valid model
+          model: 'gpt-4', // Choose a valid model
           messages: [
             { role: 'system', content: 'You are a helpful NTU Freshman Assistant.' },
             { role: 'user', content: userInput },
