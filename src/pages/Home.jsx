@@ -8,7 +8,7 @@ export default function Home() {
       <h1 className="text-5xl font-extrabold mb-6 select-none">
         Welcome to <span className="text-indigo-400">Freshman AI Assistant</span> 🎓
       </h1>
-      <p className="text-lg mb-8 text-gray-300 max-w-3xl mx-auto leading-relaxed">Your friendly AI assistant to help new NTU freshmen navigate campus life, find courses, get recommendations, chat anytime, and check in on your emotions.</p>
+      <p className="text-lg mb-8 text-gray-300 max-w-3xl mx-auto leading-relaxed">Your friendly AI assistant to help new NQU freshmen navigate campus life, find courses, get recommendations, chat anytime, and check in on your emotions.</p>
 
       <div className="flex flex-wrap justify-center gap-6">
         <Link to="/chat" className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition" aria-label="Go to ChatBot">

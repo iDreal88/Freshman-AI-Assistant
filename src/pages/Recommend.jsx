@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 const data = {
   clubs: [
-    { name: 'NTU Basketball Club', desc: 'Join for weekly basketball games and tournaments.' },
+    { name: 'NQU Basketball Club', desc: 'Join for weekly basketball games and tournaments.' },
     { name: 'Debate Society', desc: 'Sharpen your public speaking and argument skills.' },
     { name: 'Coding Club', desc: 'Hackathons, coding workshops, and project collaboration.' },
   ],

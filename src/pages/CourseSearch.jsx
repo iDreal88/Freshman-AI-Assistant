@@ -38,7 +38,7 @@ export default function CourseSearch() {
     <div className="max-w-xl mx-auto">
       <h2 className="text-3xl font-semibold mb-4 select-none">📚 Course Search</h2>
       <label htmlFor="course-search" className="mb-2 block font-medium">
-        Search NTU course names or codes:
+        Search NQU course names or codes:
       </label>
       <input
         id="course-search"

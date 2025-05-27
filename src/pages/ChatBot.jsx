@@ -24,7 +24,7 @@ export default function ChatBot() {
         body: JSON.stringify({
           model: 'openai/gpt-4',
           messages: [
-            { role: 'system', content: 'You are a helpful NTU Freshman Assistant.' },
+            { role: 'system', content: 'You are a helpful NQU Freshman Assistant.' },
             { role: 'user', content: userInput },
           ],
         }),
@@ -85,7 +85,7 @@ export default function ChatBot() {
           type="text"
           aria-label="Chat input"
           className="flex-1 border border-gray-300 dark:border-zinc-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-zinc-900 dark:text-white"
-          placeholder="Ask me anything about NTU..."
+          placeholder="Ask me anything about NQU..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
