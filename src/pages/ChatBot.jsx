@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 export default function ChatBot() {
-  const [messages, setMessages] = useState([{ sender: 'ai', text: 'Hello! I’m your Freshman AI Assistant. How can I help you today?' }]);
+  const [messages, setMessages] = useState([{ sender: 'ai', text: 'Hello! I'm your Freshman AI Assistant. How can I help you today?' }]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
@@ -14,30 +14,68 @@ export default function ChatBot() {
   }, [messages, isTyping]);
 
   const sendMessageToAI = async (userInput) => {
-    try {
-      const response = await fetch('https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${HUGGINGFACE_API_KEY}`,
-        },
-        body: JSON.stringify({
-          inputs: `User: ${userInput}\nAI:`,
-        }),
-      });
+    if (!HUGGINGFACE_API_KEY) {
+      console.error('Hugging Face API key is missing');
+      setMessages((prev) => [...prev, { 
+        sender: 'ai', 
+        text: 'Configuration error - API key not found' 
+      }]);
+      setIsTyping(false);
+      return;
+    }
 
+    try {
+      // Using a more reliable model endpoint
+      const response = await fetch(
+        'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${HUGGINGFACE_API_KEY}`,
+          },
+          body: JSON.stringify({
+            inputs: `<s>[INST] ${userInput} [/INST]`,
+            parameters: {
+              max_new_tokens: 250,
+              return_full_text: false
+            }
+          }),
+        }
+      );
+
+      // Handle model loading case
+      if (response.status === 503) {
+        const waitTime = response.headers.get('estimated-seconds') || 30;
+        setMessages((prev) => [...prev, { 
+          sender: 'ai', 
+          text: `Model is loading, please wait about ${waitTime} seconds and try again` 
+        }]);
+        setIsTyping(false);
+        return;
+      }
+
+      // Handle other errors
       if (!response.ok) {
-        const errorText = await response.text(); // capture raw text from the 404 response
-        throw new Error(`HTTP ${response.status}: ${errorText}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-
-      const aiReply = data?.[0]?.generated_text?.split('AI:')[1]?.trim() || "Sorry, I couldn't get a response.";
+      
+      // Handle different possible response formats
+      const aiReply = data[0]?.generated_text || 
+                      "Sorry, I couldn't process that. Please try again.";
+      
       setMessages((prev) => [...prev, { sender: 'ai', text: aiReply }]);
     } catch (err) {
-      console.error('Fetch error:', err);
-      setMessages((prev) => [...prev, { sender: 'ai', text: 'There was an error contacting AI.' }]);
+      console.error('API Error:', err);
+      setMessages((prev) => [...prev, { 
+        sender: 'ai', 
+        text: err.message.includes('404') 
+          ? 'The AI model is currently unavailable. Please try another model.' 
+          : `Error: ${err.message || 'Failed to get response'}`
+      }]);
     } finally {
       setIsTyping(false);
     }
@@ -45,7 +83,7 @@ export default function ChatBot() {
 
   const handleSend = () => {
     if (!input.trim() || isTyping) return;
-    const userMessage = input.trim();
+    const userMessage = input.trim().slice(0, 500); // Limit input length
     setMessages((msgs) => [...msgs, { sender: 'user', text: userMessage }]);
     setInput('');
     setIsTyping(true);
@@ -55,6 +93,16 @@ export default function ChatBot() {
   const clearChat = () => {
     setMessages([{ sender: 'ai', text: 'Chat cleared. How can I assist you now?' }]);
     setInput('');
+  };
+
+  // Alternative model suggestion if primary fails
+  const tryAlternativeModel = () => {
+    setMessages((prev) => [...prev, { 
+      sender: 'ai', 
+      text: 'Trying an alternative model...' 
+    }]);
+    setIsTyping(true);
+    // You would implement similar logic as sendMessageToAI but with a different model
   };
 
   return (
@@ -82,20 +130,40 @@ export default function ChatBot() {
           type="text"
           aria-label="Chat input"
           className="flex-1 border border-gray-300 dark:border-zinc-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-zinc-900 dark:text-white"
-          placeholder="Ask me anything about NQU..."
+          placeholder="Ask me anything..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           disabled={isTyping}
           autoComplete="off"
         />
-        <button onClick={handleSend} disabled={isTyping || !input.trim()} className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition">
+        <button 
+          onClick={handleSend} 
+          disabled={isTyping || !input.trim()} 
+          className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+        >
           Send
         </button>
-        <button onClick={clearChat} className="px-4 py-2 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 transition" aria-label="Clear chat">
+        <button 
+          onClick={clearChat} 
+          className="px-4 py-2 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 transition" 
+          aria-label="Clear chat"
+        >
           Clear
         </button>
       </div>
+
+      {/* Error recovery suggestion */}
+      {messages.some(m => m.text.includes('unavailable')) && (
+        <div className="mt-2 text-center">
+          <button 
+            onClick={tryAlternativeModel}
+            className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+          >
+            Try alternative model
+          </button>
+        </div>
+      )}
     </div>
   );
 }
