@@ -23,7 +23,7 @@ export default function ChatBot() {
           'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: 'openai/gpt-3.5-turbo',
+          model: 'openai/gpt-4',
           messages: [
             { role: 'system', content: 'You are a helpful NTU Freshman Assistant.' },
             { role: 'user', content: userInput },
