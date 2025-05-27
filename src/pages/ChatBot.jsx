@@ -15,28 +15,28 @@ export default function ChatBot() {
 
   const sendMessageToAI = async (userInput) => {
     try {
-      const response = await fetch('https://api-inference.huggingface.co/models/mistralai/Devstral-Small-2505', {
+      const response = await fetch('https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${HUGGINGFACE_API_KEY}`,
+          Authorization: `Bearer ${HUGGINGFACE_API_KEY}`,
         },
         body: JSON.stringify({
           inputs: `User: ${userInput}\nAI:`,
         }),
       });
 
-      const data = await response.json();
-      console.log('Hugging Face Response:', data);
-
-      if (!response.ok || data.error) {
-        throw new Error(data?.error || 'API request failed');
+      if (!response.ok) {
+        const errorText = await response.text(); // capture raw text from the 404 response
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
       }
 
-      const aiReply = data?.generated_text || "Sorry, I couldn't get a response.";
+      const data = await response.json();
+
+      const aiReply = data?.[0]?.generated_text?.split('AI:')[1]?.trim() || "Sorry, I couldn't get a response.";
       setMessages((prev) => [...prev, { sender: 'ai', text: aiReply }]);
     } catch (err) {
-      console.error(err);
+      console.error('Fetch error:', err);
       setMessages((prev) => [...prev, { sender: 'ai', text: 'There was an error contacting AI.' }]);
     } finally {
       setIsTyping(false);
