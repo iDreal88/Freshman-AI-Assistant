@@ -79,7 +79,7 @@ export default function CourseSearch() {
         id="course-search"
         type="search"
         className="w-full border border-gray-400 rounded-lg p-3 mb-6 text-white-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        placeholder="e.g. CS101 or economics"
+        placeholder="e.g. BUS201 or Business"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         aria-describedby="course-search-help"
