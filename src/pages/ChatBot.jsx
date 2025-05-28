@@ -49,7 +49,7 @@ export default function ChatBot() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: 'openai/gpt-4',
+          model: 'openai/gpt-3.5-turbo',
           messages: formattedMessages,
           temperature: 0.7,
           max_tokens: 500,
