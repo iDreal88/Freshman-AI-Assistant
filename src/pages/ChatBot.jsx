@@ -25,9 +25,6 @@ export default function ChatBot() {
       return;
     }
 
-    console.log('OPENROUTER_API_KEY:', OPENROUTER_API_KEY);
-    console.log('ENV API KEY:', import.meta.env.VITE_OPENROUTER_API_KEY);
-
     try {
       const formattedMessages = [
         {
@@ -46,11 +43,10 @@ export default function ChatBot() {
         },
       ];
 
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      const response = await fetch('https://freshman-ai-assistant.s111340711.workers.dev', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           model: 'openai/gpt-4',
