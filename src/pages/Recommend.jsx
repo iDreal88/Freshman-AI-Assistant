@@ -3,19 +3,37 @@ import React, { useState } from 'react';
 
 const data = {
   clubs: [
-    { name: 'NQU Basketball Club', desc: 'Join for weekly basketball games and tournaments.' },
-    { name: 'Debate Society', desc: 'Sharpen your public speaking and argument skills.' },
-    { name: 'Coding Club', desc: 'Hackathons, coding workshops, and project collaboration.' },
+    { name: 'International Student Club', desc: 'Promotes cultural exchange and supports foreign students.' },
+    { name: 'Dance Club', desc: 'Offers regular K-pop, street, and modern dance sessions.' },
+    { name: 'Photography Club', desc: 'For those into visual storytelling and media creation.' },
+    { name: 'Volunteer Service Club', desc: 'Great for community engagement and social contribution.' },
   ],
   eateries: [
-    { name: 'North Spine Food Court', desc: 'Affordable local meals with a wide variety.' },
-    { name: 'Starbucks, Innovation Wing', desc: 'Great spot for coffee and studying.' },
-    { name: 'The Deck', desc: 'Casual dining with western and local fusion.' },
+    { name: 'NQU Student Cafeteria', desc: 'Affordable Taiwanese meals, vegetarian options available.' },
+    { name: '7-Eleven', desc: 'Quick meals and snacks, with Kinmen local items.' },
+    { name: 'JSP (呷尚宝金門店)', desc: 'Affordable, quick, and tasty breakfast options favored by students and locals.' },
+    { name: 'Milksha', desc: 'Student favorite. Must-try: Earl Grey Latte with pudding.' },
   ],
   studySpots: [
-    { name: 'LT19 Library', desc: 'Quiet study rooms with great natural light.' },
-    { name: 'Innovation Wing Rooftop', desc: 'Outdoor study area with scenic views.' },
-    { name: 'Hall 5 Common Room', desc: 'Relaxed atmosphere with couches and snacks.' },
+    { name: 'Main Library', desc: 'Great for quiet individual study or group discussions. Equipped with Wi-Fi, outlets, and AC.' },
+    { name: 'Engineering Building Study Area', desc: 'Less crowded, ideal for deep work.' },
+    { name: 'Cafeteria Upper Level', desc: 'Can be used during off-peak hours as a casual study zone.' },
+  ],
+  facilities: [
+    { name: 'Sports Complex', desc: 'Includes basketball courts, tennis courts, gym, and badminton courts.' },
+    { name: 'Computer Labs', desc: 'Located in the Information Engineering building – useful for coding or printing.' },
+    { name: 'Student Activity Center', desc: 'Used for club meetings and campus events.' },
+    { name: 'Health Center', desc: 'Basic medical care and counseling services.' },
+  ],
+  outdoor: [
+    { name: 'NQU Lakeside Park', desc: 'Calm and scenic; great for reading or taking a break between classes.' },
+    { name: 'Shuangli Wetlands (雙鯉濕地)', desc: 'Near campus, beautiful for bird watching and walking.' },
+    { name: 'Houpu Old Street', desc: 'A short bike ride away, perfect for weekend wandering and snacks.' },
+    { name: 'Health Center', desc: 'Basic medical care and counseling services.' },
+  ],
+  transportation: [
+    { name: 'Bike Rentals on Campus', desc: 'Easy way to get around campus and into Jincheng town.' },
+    { name: 'Bus to Kinmen City', desc: 'Use your EasyCard (悠遊卡) or StudentCard for short-distance public transit.' },
   ],
 };
 
@@ -39,6 +57,9 @@ export default function Recommend() {
         <option value="clubs">Clubs</option>
         <option value="eateries">Eateries</option>
         <option value="studySpots">Study Spots</option>
+        <option value="facilities">Facilities</option>
+        <option value="outdoor">Outdoor</option>
+        <option value="transportation">Transportation</option>
       </select>
 
       <ul className="bg-white rounded-lg shadow divide-y divide-gray-200">

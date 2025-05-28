@@ -2,11 +2,46 @@
 import React, { useState, useEffect } from 'react';
 
 const allCourses = [
-  { code: 'CS101', name: 'Intro to Computer Science', description: 'Learn the basics of computer science and programming.' },
-  { code: 'MATH203', name: 'Linear Algebra', description: 'Matrix theory, vector spaces, eigenvalues and eigenvectors.' },
-  { code: 'PHYS110', name: 'Physics I', description: 'Mechanics, waves, and thermodynamics.' },
-  { code: 'ECON101', name: 'Principles of Economics', description: 'Introduction to micro and macroeconomics.' },
-  { code: 'PSY200', name: 'Developmental Psychology', description: 'Study of human growth and development across lifespan.' },
+  {
+    code: 'ICL101',
+    name: 'Introduction to Cross-Strait Relations',
+    description: 'Explore the political, economic, and cultural relations between Taiwan and Mainland China.',
+  },
+  {
+    code: 'BUS201',
+    name: 'Principles of International Business',
+    description: 'Fundamentals of global business operations, trade, and cross-cultural management.',
+  },
+  {
+    code: 'CHN102',
+    name: 'Chinese Language for Beginners',
+    description: 'Basic Mandarin speaking, listening, reading, and writing skills for non-native speakers.',
+  },
+  {
+    code: 'CULT210',
+    name: 'Kinmen Cultural Studies',
+    description: 'Examine Kinmen’s unique history, architecture, and local traditions.',
+  },
+  {
+    code: 'ITC205',
+    name: 'Introduction to Information Technology',
+    description: 'Covers digital literacy, networks, and fundamental computing concepts.',
+  },
+  {
+    code: 'HIS305',
+    name: 'History of East Asia',
+    description: 'Survey of Chinese, Japanese, and Korean history with a focus on regional influence.',
+  },
+  {
+    code: 'POL310',
+    name: 'Global Governance and International Organizations',
+    description: 'Study of the UN, WTO, and regional alliances in global politics.',
+  },
+  {
+    code: 'ENV150',
+    name: 'Environmental Issues in Taiwan and East Asia',
+    description: 'An interdisciplinary look at ecological and sustainability issues in the region.',
+  },
 ];
 
 export default function CourseSearch() {
