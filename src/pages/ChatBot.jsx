@@ -26,6 +26,7 @@ export default function ChatBot() {
     }
 
     console.log('OPENROUTER_API_KEY:', OPENROUTER_API_KEY);
+    console.log('ENV API KEY:', import.meta.env.VITE_OPENROUTER_API_KEY);
 
     try {
       const formattedMessages = [
